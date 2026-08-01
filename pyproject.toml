@@ -19,6 +19,8 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0", "ruff>=0.4"]
+mt5 = ["MetaTrader5>=5.0"]
+live = ["mt5-mcp[mt5]"]
 
 [project.scripts]
 mt5-mcp = "mt5_mcp.cli:app"

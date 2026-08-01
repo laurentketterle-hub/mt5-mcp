@@ -200,6 +200,51 @@ Set env (never commit secrets):
 Without a working bridge, **live** mode returns structured errors; demos stay on **mock**.
 
 
+### MetaTrader5 Python package bridge (new)
+
+When the official [MetaTrader5](https://pypi.org/project/MetaTrader5/) Python package is
+installed (`pip install "mt5-mcp[mt5]"`), additional **live bridge MCP tools** become
+available:
+
+| Tool | Purpose |
+| --- | --- |
+| `mt5_live_doctor` | Package presence, terminal connectivity, account health |
+| `mt5_live_account` | Balance, equity, margin, leverage via MT5 API |
+| `mt5_live_terminal_info` | Terminal build, path, connection status |
+| `mt5_live_symbols` | All tradeable symbols (optional group filter) |
+| `mt5_live_symbol_info` | Symbol specification: digits, spread, contract size |
+| `mt5_live_quote` | Real-time bid/ask/last tick |
+| `mt5_live_positions` | Open positions with floating PnL |
+| `mt5_live_orders` | Pending orders (limit/stop) |
+| `mt5_live_order_send` | Execute market/pending orders on live terminal |
+| `mt5_live_history_deals` | Deal history from MT5 terminal |
+| `mt5_live_rates` | OHLCV rate bars (M1, M5, H1, D1, …) |
+
+All live bridge tools return structured JSON with an `ok` field. When the
+MetaTrader5 package is not installed, every tool returns
+`{"ok": false, "error": "MetaTrader5 not installed"}` so callers can handle
+the unavailability gracefully.
+
+**Install with live support:**
+
+```bash
+pip install -e ".[live]"
+```
+
+**Example usage (in code):**
+
+```python
+from mt5_mcp.live_bridge import MT5LiveBridge
+
+bridge = MT5LiveBridge()
+print(bridge.doctor())          # health check
+print(bridge.account_info())    # account details
+print(bridge.symbols_get())     # all symbols
+print(bridge.positions_get())   # open positions
+bridge.shutdown()
+```
+
+
 ---
 
 ## Safety
